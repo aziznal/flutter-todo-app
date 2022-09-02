@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:todo_app/core/todo/todo.model.dart';
-import 'package:todo_app/data/todo.repository.dart';
+import 'package:todo_app/core/todo/usecases/create-todo.usecase.dart';
+import 'package:todo_app/core/todo/usecases/delete-all-todos.usecase.dart';
+import 'package:todo_app/core/todo/usecases/delete-todo.usecase.dart';
+import 'package:todo_app/core/todo/usecases/get-all-todos.usecase.dart';
 import 'package:todo_app/services/dialog.service.dart';
 import 'package:todo_app/services/snackbar.service.dart';
 import 'package:todo_app/widgets/todo_list.widget.dart';
@@ -16,21 +19,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TodoRepository todoRepo = TodoRepository();
+  List<Todo> todos = [];
 
-  late final List<Todo> todos = todoRepo.getTodos();
+  _HomePageState() {
+    GetAllTodosUsecase()
+        .execute()
+        .then((fetchedTodos) => setState((() => todos = fetchedTodos)));
+  }
 
   void addNewTodo() {
     final newTodo = Todo(
-        id: Random().nextInt(pow(2, 32).toInt() - 1).toString(),
-        body: 'New Todo',
-        status: TodoStatus.isNotDone);
+      id: Random().nextInt(pow(2, 32).toInt() - 1).toString(),
+      body: 'New Todo',
+      status: TodoStatus.isNotDone,
+    );
 
-    todoRepo.createTodo(newTodo);
-
-    SnackbarService.show(context, 'Added new TODO!');
-
-    setState(() {});
+    CreateTodoUsecase().execute(newTodo).then((_) {
+      SnackbarService.show(context, 'Added new TODO!');
+      setState(() {});
+    });
   }
 
   void updateTodo(Todo updatedTodo) {
@@ -48,23 +55,19 @@ class _HomePageState extends State<HomePage> {
       confirmButtonLabel: 'Delete',
       cancelButtonLabel: 'Cancel',
     ).then((hasConfirmed) {
-      if (hasConfirmed) {
-        todoRepo.deleteTodo(deletedTodoId);
+      if (!hasConfirmed) return;
+
+      DeleteTodoUsecase().execute(deletedTodoId).then((_) {
         setState(() {});
-      }
+      });
     });
   }
 
   void removeAllTodos() {
-    final todoIds = todos.toList().map((e) => e.id);
-
-    for (var id in todoIds) {
-      todoRepo.deleteTodo(id);
-    }
-
-    SnackbarService.show(context, 'Removed All TODOs!');
-
-    setState(() {});
+    DeleteAllTodosUsecase().execute().then((value) {
+      SnackbarService.show(context, 'Removed All TODOs!');
+      setState(() {});
+    });
   }
 
   @override
