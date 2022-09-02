@@ -1,4 +1,4 @@
-import 'package:todo_app/core/todo.model.dart';
+import 'package:todo_app/core/todo/todo.model.dart';
 
 abstract class TodoRepository {
   factory TodoRepository() => InMemoryTodoRepository();
