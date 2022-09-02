@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:todo_app/core/todo/todo.model.dart';
-import 'package:todo_app/services/dialog.service.dart';
-import 'package:todo_app/services/snackbar.service.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;

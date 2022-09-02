@@ -1,22 +1,24 @@
 import 'package:todo_app/core/todo/todo.model.dart';
 
+// TODO: create local-storage based repository
+// TODO: move _InMemoryTodoRepository to its own file
+
 /// Stores Todos and allows for their retrieval
 abstract class TodoRepository {
   factory TodoRepository() => _InMemoryTodoRepository();
 
-  
   /// Returns a list of all available todos
   Future<List<Todo>> getTodos();
-  
+
   /// Returns a specific todo using its id. Returns null if no todo matches given id.
   Future<Todo?> getTodoById(String id);
-  
+
   /// Stores the given todo
   Future<void> createTodo(Todo todo);
-  
+
   /// Updates todo that has same id as given todo with the info in the given todo
   Future<void> updateTodo(Todo todo);
-  
+
   /// Deletes the todo that matches the given id
   Future<void> deleteTodo(String id);
 }

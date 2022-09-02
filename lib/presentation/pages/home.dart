@@ -7,9 +7,9 @@ import 'package:todo_app/core/todo/usecases/create-todo.usecase.dart';
 import 'package:todo_app/core/todo/usecases/delete-all-todos.usecase.dart';
 import 'package:todo_app/core/todo/usecases/delete-todo.usecase.dart';
 import 'package:todo_app/core/todo/usecases/get-all-todos.usecase.dart';
-import 'package:todo_app/services/dialog.service.dart';
-import 'package:todo_app/services/snackbar.service.dart';
-import 'package:todo_app/widgets/todo_list.widget.dart';
+import 'package:todo_app/presentation/services/dialog.service.dart';
+import 'package:todo_app/presentation/services/snackbar.service.dart';
+import 'package:todo_app/presentation/widgets/todo_list.widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
