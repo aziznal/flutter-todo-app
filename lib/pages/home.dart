@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:todo_app/core/todo.model.dart';
 import 'package:todo_app/data/todo.repository.dart';
+import 'package:todo_app/services/dialog.service.dart';
 import 'package:todo_app/services/snackbar.service.dart';
 import 'package:todo_app/widgets/todo_list.widget.dart';
 
@@ -32,6 +33,28 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  void updateTodo(Todo updatedTodo) {
+    SnackbarService.show(context, 'Edit feature coming soon!');
+
+    // todoRepo.updateTodo(updatedTodo);
+
+    // setState(() {});
+  }
+
+  void deleteTodo(String deletedTodoId) {
+    DialogService.showConfirmDialog(
+      context,
+      message: 'Delete this todo?',
+      confirmButtonLabel: 'Delete',
+      cancelButtonLabel: 'Cancel',
+    ).then((hasConfirmed) {
+      if (hasConfirmed) {
+        todoRepo.deleteTodo(deletedTodoId);
+        setState(() {});
+      }
+    });
+  }
+
   void removeAllTodos() {
     final todoIds = todos.toList().map((e) => e.id);
 
@@ -48,9 +71,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: makeAppBar(),
-      body: TodoList(todos: todos),
+      body: TodoList(
+        todos: todos,
+        onEditClicked: (updatedTodo) => updateTodo(updatedTodo),
+        onDeleteClicked: (String id) => deleteTodo(id),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: addNewTodo,
+        child: const Icon(Icons.add),
       ),
     );
   }
