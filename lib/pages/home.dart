@@ -47,7 +47,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [
+      appBar: makeAppBar(),
+      body: TodoList(todos: todos),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addNewTodo,
+      ),
+    );
+  }
+
+  AppBar makeAppBar() {
+    return AppBar(
+      actions: [
         MaterialButton(
           onPressed: removeAllTodos,
           child: const Icon(
@@ -55,11 +65,7 @@ class _HomePageState extends State<HomePage> {
             color: Color.fromARGB(255, 255, 0, 0),
           ),
         )
-      ]),
-      body: TodoList(todos: todos),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addNewTodo,
-      ),
+      ],
     );
   }
 }
